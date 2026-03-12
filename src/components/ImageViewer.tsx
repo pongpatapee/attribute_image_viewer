@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { resolveImageUrl, type ImageRoot } from "../utils/images";
+import { exportElementToPng } from "../utils/exportMatrixImage";
 import type { CsvRow } from "../utils/csv";
 import styles from "./ImageViewer.module.css";
 
@@ -84,10 +85,34 @@ export interface ImageViewerProps {
 export function ImageViewer({ rows, rowToImagePath, col1, col2, imageRoot }: ImageViewerProps) {
   const col1Values = distinctValues(rows, col1);
   const col2Values = distinctValues(rows, col2);
+  const [exporting, setExporting] = useState(false);
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const handleExport = async () => {
+    if (!gridRef.current) return;
+    setExporting(true);
+    try {
+      const filename = `attribute-matrix-${col1.replace(/[^a-zA-Z0-9_-]/g, "_")}-${col2.replace(/[^a-zA-Z0-9_-]/g, "_")}.png`;
+      await exportElementToPng(gridRef.current, filename);
+    } finally {
+      setExporting(false);
+    }
+  };
 
   return (
     <div className={styles.wrapper} role="region" aria-label="Image matrix by selected attributes">
-      <div className={styles.grid} aria-label={`Matrix: ${col1} (columns) by ${col2} (rows)`}>
+      <div className={styles.toolbar}>
+        <button
+          type="button"
+          className={styles.exportButton}
+          onClick={handleExport}
+          disabled={exporting}
+          aria-label="Export matrix as PNG image"
+        >
+          {exporting ? "Exporting…" : "Export as image"}
+        </button>
+      </div>
+      <div ref={gridRef} className={styles.grid} aria-label={`Matrix: ${col1} (columns) by ${col2} (rows)`}>
         <div className={styles.corner}>
           <span className={styles.axisLabel}>Column 1</span>
         </div>
@@ -99,7 +124,13 @@ export function ImageViewer({ rows, rowToImagePath, col1, col2, imageRoot }: Ima
           ))}
         </div>
         <div className={styles.rowLabelBlock}>
-          <span className={styles.axisLabelVertical}>Column 2</span>
+          <div className={styles.axisLabelVertical} aria-label="Column 2">
+            {"Column 2".split("").map((char, i) => (
+              <span key={i} className={styles.axisLabelChar}>
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))}
+          </div>
           <div className={styles.rowLabels}>
             {col2Values.map((v) => (
               <div key={v} className={styles.rowLabelCell}>
@@ -122,7 +153,7 @@ export function ImageViewer({ rows, rowToImagePath, col1, col2, imageRoot }: Ima
                 .map((i) => rowToImagePath[i])
                 .filter((p): p is string => p != null && p.trim() !== "");
               return (
-                <div key={`${v1}-${v2}`} className={styles.cell}>
+                <div key={`${v1}-${v2}`} className={styles.cell} data-export-cell>
                   {paths.length === 0 ? (
                     <div className={styles.emptyCell}>No images</div>
                   ) : (

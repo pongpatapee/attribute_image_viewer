@@ -3,6 +3,29 @@
   overflow: auto;
 }
 
+.toolbar {
+  margin-bottom: 1rem;
+}
+
+.exportButton {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #4a9c6d;
+  background: #2d5a3d;
+  color: #e8f5ec;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.exportButton:hover:not(:disabled) {
+  background: #3a6d4a;
+}
+
+.exportButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 .grid {
   display: grid;
   gap: 0;
@@ -57,16 +80,25 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-top: none;
   background: rgba(0, 0, 0, 0.2);
+  overflow: visible;
 }
 
 .axisLabelVertical {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-size: 0.85rem;
   font-weight: 600;
   color: #aaa;
   padding: 0.5rem;
   align-self: center;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.axisLabelChar {
+  display: block;
 }
 
 .rowLabels {
