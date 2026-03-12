@@ -29,14 +29,6 @@ export function parseCsv(file: File): Promise<ParseResult> {
           return;
         }
         const headers = Object.keys(rows[0]);
-        if (!headers.includes(DATA_IMAGE_COLUMN)) {
-          resolve({
-            rows,
-            headers,
-            error: `CSV must contain a column named "${DATA_IMAGE_COLUMN}".`,
-          });
-          return;
-        }
         resolve({ rows, headers });
       },
       error(err) {

@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { parseCsv, type CsvRow } from "../utils/csv";
+import { parseCsv, getAttributeHeaders, type CsvRow } from "../utils/csv";
 import styles from "./CsvUpload.module.css";
 
 export interface CsvUploadProps {
@@ -25,7 +25,7 @@ export function CsvUpload({
       onError(result.error);
       return;
     }
-    const attributeHeaders = result.headers.filter((h) => h !== "data_image");
+    const attributeHeaders = getAttributeHeaders(result.headers);
     onData(result.rows, attributeHeaders);
     e.target.value = "";
   };
@@ -72,7 +72,7 @@ export function CsvUpload({
             Select image folder
           </button>
           <p className={styles.help}>
-            Paths in the CSV are relative to this folder.
+            Images from this folder will be mapped to CSV rows in the next step.
           </p>
         </div>
       )}

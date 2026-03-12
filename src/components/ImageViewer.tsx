@@ -12,16 +12,16 @@ function distinctValues(rows: CsvRow[], column: string): string[] {
   return Array.from(set);
 }
 
-function rowsForCell(
+function rowIndicesForCell(
   rows: CsvRow[],
   col1: string,
   col2: string,
   v1: string,
   v2: string
-): CsvRow[] {
-  return rows.filter(
-    (r) => r[col1]?.trim() === v1 && r[col2]?.trim() === v2
-  );
+): number[] {
+  return rows
+    .map((r, i) => (r[col1]?.trim() === v1 && r[col2]?.trim() === v2 ? i : -1))
+    .filter((i) => i >= 0);
 }
 
 interface CellImageProps {
@@ -35,10 +35,13 @@ function CellImage({ path, imageRoot }: CellImageProps) {
 
   useEffect(() => {
     let cancelled = false;
-    setFailed(false);
     if (!path.trim()) {
-      setUrl(null);
-      return;
+      queueMicrotask(() => {
+        if (!cancelled) setUrl(null);
+      });
+      return () => {
+        cancelled = true;
+      };
     }
     resolveImageUrl(path, imageRoot).then((resolved) => {
       if (!cancelled) {
@@ -72,12 +75,13 @@ function CellImage({ path, imageRoot }: CellImageProps) {
 
 export interface ImageViewerProps {
   rows: CsvRow[];
+  rowToImagePath: Record<number, string>;
   col1: string;
   col2: string;
   imageRoot: ImageRoot;
 }
 
-export function ImageViewer({ rows, col1, col2, imageRoot }: ImageViewerProps) {
+export function ImageViewer({ rows, rowToImagePath, col1, col2, imageRoot }: ImageViewerProps) {
   const col1Values = distinctValues(rows, col1);
   const col2Values = distinctValues(rows, col2);
 
@@ -113,10 +117,10 @@ export function ImageViewer({ rows, col1, col2, imageRoot }: ImageViewerProps) {
         >
           {col2Values.map((v2) =>
             col1Values.map((v1) => {
-              const cellRows = rowsForCell(rows, col1, col2, v1, v2);
-              const paths = cellRows
-                .map((r) => r["data_image"])
-                .filter((p) => p != null && p.trim() !== "");
+              const indices = rowIndicesForCell(rows, col1, col2, v1, v2);
+              const paths = indices
+                .map((i) => rowToImagePath[i])
+                .filter((p): p is string => p != null && p.trim() !== "");
               return (
                 <div key={`${v1}-${v2}`} className={styles.cell}>
                   {paths.length === 0 ? (
