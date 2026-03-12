@@ -1,0 +1,61 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.button {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #4a9c6d;
+  background: #2d5a3d;
+  color: #e8f5ec;
+  cursor: pointer;
+  font-size: 0.95rem;
+  align-self: flex-start;
+}
+
+.button:hover {
+  background: #3a6d4a;
+}
+
+.buttonSecondary {
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #666;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.9rem;
+  align-self: flex-start;
+}
+
+.buttonSecondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.help {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #888;
+  max-width: 260px;
+}
