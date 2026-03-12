@@ -1,73 +1,33 @@
-# React + TypeScript + Vite
+# Attribute Image Viewer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small data visualization tool for comparing images across different combinations of attributes. When you have images that map to data records (e.g., experiment results, samples, or participants), this app lets you arrange and view those images in a matrix by two chosen attributes—so you can quickly compare how images differ across attribute values.
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **Load your data** — Upload a CSV where each row is a record and one column contains the image filename (or path) for that row.
+2. **Point to your images** — Select the folder that contains the image files. The app uses the File System Access API (supported in Chromium-based browsers).
+3. **Map rows to images** — Confirm or adjust which image file corresponds to each CSV row.
+4. **Choose two attributes** — Select two columns from your CSV as the axes for the view.
+5. **View the matrix** — Images are shown in a grid: one attribute along rows, the other along columns. You can compare images across different attribute combinations at a glance.
 
-## React Compiler
+## Getting started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open the URL shown in the terminal (typically `http://localhost:5173`). For the folder picker to work, use a Chromium-based browser (e.g. Chrome, Edge).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Sample data
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+The `sample_data/` directory includes a small CSV and references to image files so you can try the workflow without your own dataset.
+
+## Screenshots
+
+![data row mapping sample](assets/image_data_map.png)
+![image matrix sample](assets/image_matrix.png)
+
+---
+
+Built with React, TypeScript, and Vite.

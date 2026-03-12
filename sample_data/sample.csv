@@ -1,0 +1,11 @@
+gender,age,income,education,marital_status,location,purchase_history
+male,25,50000,bachelor,single,new york,100
+female,30,60000,master,married,los angeles,200
+male,35,70000,phd,single,chicago,300
+female,40,80000,bachelor,married,houston,400
+male,45,90000,master,single,san francisco,500
+female,50,100000,phd,married,seattle,600
+male,55,110000,bachelor,single,boston,700
+female,60,120000,master,married,washington,800
+male,65,130000,phd,single,san diego,900
+female,70,140000,bachelor,married,austin,1000
